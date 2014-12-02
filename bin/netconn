@@ -43,6 +43,7 @@ if [ "$1" = "-a" ]; then
   ;;
   "FreeBSD")
     sockstat -46 | \
+    awk '$6 !~ /^6$/ {print} $6 ~ /^6$/ {$6=""; print}' | \
     awk '$7 ~ /[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ { $4=""; print }' | \
     column -t | \
     sort -r -k 5
@@ -59,6 +60,7 @@ else
   ;;
   "FreeBSD")
     sockstat -46 | \
+    awk '$6 !~ /^6$/ {print} $6 ~ /^6$/ {$6=""; print}' | \
     sed -e 's#FOREIGN *ADDRESS#FOREIGN_ADDRESS#' | \
     sed -e 's#LOCAL *ADDRESS#LOCAL_ADDRESS#' | \
     grep -v 'USER.*COMMAND.*PID.*PROTO.*ADDRESS' | \
