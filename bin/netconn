@@ -31,7 +31,7 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141202-081603
+SCRIPTVERSION=141202-082237
 
 if [ "$1" = "-a" ]; then
   case `uname -s` in
@@ -61,6 +61,7 @@ else
     sockstat -46 | \
     sed -e 's#FOREIGN *ADDRESS#FOREIGN_ADDRESS#' | \
     sed -e 's#LOCAL *ADDRESS#LOCAL_ADDRESS#' | \
+    grep -v 'USER.*COMMAND.*PID.*PROTO.*ADDRESS' | \
     awk '{ $4=""; print }' | \
     column -t | \
     sort -r -k 5
