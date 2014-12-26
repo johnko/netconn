@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141226-064624
+SCRIPTVERSION=141226-070044
 
 if [ "$1" = "-a" ]; then
   case `uname -s` in
@@ -40,11 +40,8 @@ if [ "$1" = "-a" ]; then
     sort -r -k 5
   ;;
   "FreeBSD")
-    sockstat -46 | \
-    awk '$4 ~ /p4$/ {$3="";print} $5 ~ /p4$/ {$4="";print} ' | \
-    awk '$7 ~ /[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ {print}' | \
-    column -t | \
-    sort -r -k 5
+    ########## -c connected, -L not loopback
+    sockstat -46cL
   ;;
   esac
 else
@@ -57,13 +54,7 @@ else
     sort -r -k 5
   ;;
   "FreeBSD")
-    sockstat -46 | \
-    awk '$4 ~ /p4$/ {$3="";print} $5 ~ /p4$/ {$4="";print} ' | \
-    sed -e 's#FOREIGN *ADDRESS#FOREIGN_ADDRESS#' | \
-    sed -e 's#LOCAL *ADDRESS#LOCAL_ADDRESS#' | \
-    grep -v 'USER.*COMMAND.*PID.*PROTO.*ADDRESS' | \
-    column -t | \
-    sort -r -k 5
+    sockstat -46
   ;;
   esac
 fi
