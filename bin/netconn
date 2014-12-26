@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141202-082237
+SCRIPTVERSION=141226-064624
 
 if [ "$1" = "-a" ]; then
   case `uname -s` in
@@ -41,8 +41,8 @@ if [ "$1" = "-a" ]; then
   ;;
   "FreeBSD")
     sockstat -46 | \
-    awk '$6 !~ /^6$/ {print} $6 ~ /^6$/ {$6=""; print}' | \
-    awk '$7 ~ /[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ { $4=""; print }' | \
+    awk '$4 ~ /p4$/ {$3="";print} $5 ~ /p4$/ {$4="";print} ' | \
+    awk '$7 ~ /[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ {print}' | \
     column -t | \
     sort -r -k 5
   ;;
@@ -58,11 +58,10 @@ else
   ;;
   "FreeBSD")
     sockstat -46 | \
-    awk '$6 !~ /^6$/ {print} $6 ~ /^6$/ {$6=""; print}' | \
+    awk '$4 ~ /p4$/ {$3="";print} $5 ~ /p4$/ {$4="";print} ' | \
     sed -e 's#FOREIGN *ADDRESS#FOREIGN_ADDRESS#' | \
     sed -e 's#LOCAL *ADDRESS#LOCAL_ADDRESS#' | \
     grep -v 'USER.*COMMAND.*PID.*PROTO.*ADDRESS' | \
-    awk '{ $4=""; print }' | \
     column -t | \
     sort -r -k 5
   ;;
